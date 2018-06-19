@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using App.DataAccess;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.ResponseCompression;
+using System.Linq;
 
 namespace App
 {
@@ -20,7 +23,22 @@ namespace App
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMiniProfiler().AddEntityFramework();
-            services.AddMvc();
+            services.AddResponseCompression();
+
+            services.AddMvc(options =>
+            {
+                options.CacheProfiles.Add("Default",
+                    new CacheProfile()
+                    {
+                        Duration = 30
+                    });
+                options.CacheProfiles.Add("Never",
+                    new CacheProfile()
+                    {
+                        Location = ResponseCacheLocation.None,
+                        NoStore = true
+                    });
+            });
 
             var connection = @"Server=(localdb)\mssqllocaldb;Database=AspNetCore.PerformanceDemo;Trusted_Connection=True;ConnectRetryCount=0";
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection));
@@ -30,6 +48,7 @@ namespace App
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseMiniProfiler();
+            app.UseResponseCompression();
 
             if (env.IsDevelopment())
             {

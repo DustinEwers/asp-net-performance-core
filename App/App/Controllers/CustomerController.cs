@@ -20,6 +20,14 @@ namespace App.Controllers
             return View(customers);
         }
 
+        public ActionResult Json()
+        {
+            var customers = _context.Customers.Take(100).ToList();
+
+            return Json(customers);
+        }
+
+
         // GET: Customer/Details/5
         public ActionResult Details(int id)
         {

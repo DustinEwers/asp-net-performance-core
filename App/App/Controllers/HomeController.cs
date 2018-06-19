@@ -27,6 +27,7 @@ namespace App.Controllers
             return View();
         }
 
+        [ResponseCache(CacheProfileName = "Default")]
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
@@ -34,6 +35,7 @@ namespace App.Controllers
             return View();
         }
 
+        [ResponseCache(CacheProfileName = "Never")]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
