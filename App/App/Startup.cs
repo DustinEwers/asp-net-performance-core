@@ -5,8 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using App.DataAccess;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.ResponseCompression;
-using System.Linq;
+using App.Services;
 
 namespace App
 {
@@ -42,6 +41,8 @@ namespace App
 
             var connection = @"Server=(localdb)\mssqllocaldb;Database=AspNetCore.PerformanceDemo;Trusted_Connection=True;ConnectRetryCount=0";
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection));
+
+            services.AddTransient<ICustomerService, CustomerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
